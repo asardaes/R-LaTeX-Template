@@ -1,0 +1,37 @@
+\section{Basics}
+\label{sec:basics}
+
+<<basics-data, cache.md5 = my_md5sum("Data/chess.txt")>>=
+
+# Notice how the path on the chunk options above is with respect to root file Thesis.Rnw
+# However, the actual chunk code below needs a path with respect to the current file
+chess <- read.csv("../Data/chess.txt", header = FALSE)
+colnames(chess)[ncol(chess)] <- "label"
+
+@
+
+<<chess-rf>>=
+set.seed(3830)
+
+chess_rf <- train(label ~ ., data = chess,
+                  method = "rf",
+                  tuneGrid = data.frame(mtry = 8:15),
+                  trControl = trainControl(method = "oob"))
+
+best <- chess_rf$bestTune$mtry
+acc <- round(chess_rf$results$Accuracy[chess_rf$results$mtry == best], 3)
+@
+
+Using a random forest with the Chess dataset and OOB error estimate, best value of \texttt{mtry} was \Sexpr{best} with an accuracy of \Sexpr{acc}.
+
+Try compiling the thesis with parallel support to see the difference in run time.
+
+<<basics-clean, include = FALSE, cache = FALSE, load.utils = NULL, dependson = NULL>>=
+
+# If there are parallel workers saved on a variable called 'cl' (the default), clean each worker too
+if (!is.null(cl <- get0("cl", .GlobalEnv))) parallel::clusterEvalQ(cl, clean_workspace(load.utils = TRUE))
+
+# Clean knitr environment so that each child file is independent from each other
+clean_workspace()
+
+@

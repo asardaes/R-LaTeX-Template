@@ -1,0 +1,48 @@
+% Captions in floating environments
+\usepackage[labelsep=colon,tableposition=top,font=small,margin=5pt,format=hang]{caption}
+
+% For subcaptions in figures
+\usepackage{subcaption}
+
+% For sidewaysfigure
+%\usepackage{rotfloat}
+
+% For professional looking tables
+\usepackage{booktabs} 
+
+%\usepackage{multirow}
+%\usepackage{multicol}
+%\usepackage{longtable}
+%\usepackage{tabularx}
+
+% For underscores that correspond to the encoding
+\usepackage[T1]{fontenc}
+
+% For \FloatBarrier
+\usepackage[section,below]{placeins}
+
+% Linebreaks in tables
+\usepackage{makecell}
+
+% Hyperlinks
+\usepackage[hidelinks]{hyperref}
+
+% Table of content settings
+\setcounter{tocdepth}{2}
+\setcounter{secnumdepth}{2}
+
+% Allowed percentages of page a float can use
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\topfraction}{0.95}
+\renewcommand{\bottomfraction}{0.95}
+\renewcommand{\floatpagefraction}{0.75}
+\setcounter{totalnumber}{5}
+
+% Figure names
+\renewcommand{\figurename}{Fig.}
+
+% Used for knitr images from Rnw files
+\newcommand{\subfloat}[2][default for first parameter: need a sub-caption]{\subcaptionbox{#1}{#2}}
+
+% Typesetting commands
+\newcommand{\R}{\textbf{\textsf{R}}}

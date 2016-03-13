@@ -1,0 +1,19 @@
+\section{Tables}
+\label{sec:tables}
+
+<<table-co2, results = "asis">>=
+data("CO2")
+co2_head <- head(CO2)
+
+make_table(co2_head, caption = "First rows of the CO2 dataset. Look at the list of tables to see the difference between short and long table caption.")
+@
+
+<<tables-clean, include = FALSE, cache = FALSE, load.utils = NULL, dependson = NULL>>=
+
+# If there are parallel workers saved on a variable called 'cl' (the default), clean each worker too
+if (!is.null(cl <- get0("cl", .GlobalEnv))) parallel::clusterEvalQ(cl, clean_workspace(load.utils = TRUE))
+
+# Clean knitr environment so that each child file is independent from each other
+clean_workspace()
+
+@

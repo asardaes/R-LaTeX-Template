@@ -1,0 +1,11 @@
+base
+knitr
+foreach
+xtable
+ggplot2
+reshape2
+iterators
+doParallel
+lattice
+caret
+randomForest
