@@ -20,4 +20,12 @@ Examples (Linux):
 ./compile-linux.sh TRUE
 ```
 
-The PDF file will contain more specifics and explanations of the sample content.
+The PDF file contains more specifics and explanations of the sample content.
+
+Used `R` packages in this sample
+
+* xtable
+* ggplot2
+* reshape2
+* caret
+* randomForest

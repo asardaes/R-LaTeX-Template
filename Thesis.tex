@@ -10,10 +10,6 @@
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
 
-% REMINDER: working directory for *chunk headers* and *knitr options* is always directory of **root** file...
-
-% Chunk names must be unique, considering any and all chunks from children files
-
 
 
 % ===========================================================================================================
@@ -62,6 +58,11 @@ I want to thank...
 
 \input{Introduction/Introduction}
 
+\chapter{Organization}
+\label{ch:organization}
+
+\input{Organization/Organization}
+
 \chapter{Examples}
 \label{ch:examples}
 
@@ -69,13 +70,44 @@ I want to thank...
 \section{Basics}
 \label{sec:basics}
 
+The \texttt{caret} package is one that can take of parallel execution. Below, I train a random forest on a sample dataset~\cite{lichman2013}.
+
+% This chunk depends on the MD5 of chess.txt; if that file changes, the chunk needs to be updated
 
 
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{set.seed}\hlstd{(}\hlnum{3830}\hlstd{)}
 
+\hlstd{chess_rf} \hlkwb{<-} \hlkwd{train}\hlstd{(label} \hlopt{~} \hlstd{.,} \hlkwc{data} \hlstd{= chess,}
+                  \hlkwc{method} \hlstd{=} \hlstr{"rf"}\hlstd{,}
+                  \hlkwc{tuneGrid} \hlstd{=} \hlkwd{data.frame}\hlstd{(}\hlkwc{mtry} \hlstd{=} \hlnum{8}\hlopt{:}\hlnum{15}\hlstd{),}
+                  \hlkwc{trControl} \hlstd{=} \hlkwd{trainControl}\hlstd{(}\hlkwc{method} \hlstd{=} \hlstr{"oob"}\hlstd{))}
+
+\hlstd{best} \hlkwb{<-} \hlstd{chess_rf}\hlopt{$}\hlstd{bestTune}\hlopt{$}\hlstd{mtry}
+\hlstd{acc} \hlkwb{<-} \hlkwd{round}\hlstd{(chess_rf}\hlopt{$}\hlstd{results}\hlopt{$}\hlstd{Accuracy[chess_rf}\hlopt{$}\hlstd{results}\hlopt{$}\hlstd{mtry} \hlopt{==} \hlstd{best],}
+             \hlnum{3}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
 
 Using a random forest with the Chess dataset and OOB error estimate, best value of \texttt{mtry} was 13 with an accuracy of 0.995.
 
-Try compiling the thesis with parallel support to see the difference in run time.
+Try changing the seed (to invalidate the chunk's cache) and compiling the thesis with/without parallel support to see the difference in run time.
+
+If you don't specify a seed, you might lose reproducibility. For example, the code below might give a different result each time you recompile if you add code before it and \textit{after} the cache for the previous chunk has been created. This is because the previous chunk will no longer set the seed unless its cache is invalidated and the chunk is thus updated.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{rnorm}\hlstd{(}\hlnum{1}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.1699193
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 
 
 
@@ -87,7 +119,7 @@ Try compiling the thesis with parallel support to see the difference in run time
 
 \graphicspath{Examples/Figs/}
 
-See Fig.~\ref{fig:iris-histograms} for an example of a single plot.
+Plots can be created directly in \R{} and the results are added automatically to the \texttt{tex} file. See Fig.~\ref{fig:iris-histograms} for an example of a single plot.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{figure}[htpb]
@@ -102,7 +134,7 @@ See Fig.~\ref{fig:iris-histograms} for an example of a single plot.
 
 \end{knitrout}
 
-See Fig.~\ref{fig:mtcars-subplots} for an example of two plots: Fig.~\ref{fig:mtcars-subplots1} and Fig.~\ref{fig:mtcars-subplots2}.
+You can create several plots per chunk and have them in the same main figure. See Fig.~\ref{fig:mtcars-subplots} for an example of two plots: Fig.~\ref{fig:mtcars-subplots1} and Fig.~\ref{fig:mtcars-subplots2}.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{figure}[htpb]
@@ -124,6 +156,8 @@ See Fig.~\ref{fig:mtcars-subplots} for an example of two plots: Fig.~\ref{fig:mt
 \section{Tables}
 \label{sec:tables}
 
+Tables can also be created in \R{} and inserted automatically. Check Table~\ref{tab:co2_head}.
+
 % latex table generated in R 3.2.4 by xtable 1.8-2 package
 % Sun Mar 13 14:41:42 2016
 \begin{table}[htbp]
@@ -140,6 +174,29 @@ See Fig.~\ref{fig:mtcars-subplots} for an example of two plots: Fig.~\ref{fig:mt
   4 & Qn1 & Quebec & nonchilled & 350.00 & 37.20 \\ 
   5 & Qn1 & Quebec & nonchilled & 500.00 & 35.30 \\ 
   6 & Qn1 & Quebec & nonchilled & 675.00 & 39.20 \\ 
+   \bottomrule
+\end{tabular}
+\end{table}
+
+
+Something Useful I found was that you can use the \LaTeX{} package \texttt{makecell} to insert linebreaks in table headers. See the source code for Table~\ref{tab:co2_head_2}.
+
+% latex table generated in R 3.2.3 by xtable 1.8-2 package
+% Mon Mar 14 16:35:31 2016
+\begin{table}[htbp]
+\centering
+\caption[Same table as before but with linebreaks]{Same table as before but with linebreaks.} 
+\label{tab:co2_head_2}
+\begin{tabular}{lcccc}
+  \toprule
+\thead{Plant \\ Something} & \thead{Type \\ Yes} & \thead{Treatment \\ No} & \thead{conc \\ whatever} & \thead{uptake \\ ok} \\ 
+  \midrule
+Qn1 & Quebec & nonchilled & 95.00 & 16.00 \\ 
+  Qn1 & Quebec & nonchilled & 175.00 & 30.40 \\ 
+  Qn1 & Quebec & nonchilled & 250.00 & 34.80 \\ 
+  Qn1 & Quebec & nonchilled & 350.00 & 37.20 \\ 
+  Qn1 & Quebec & nonchilled & 500.00 & 35.30 \\ 
+  Qn1 & Quebec & nonchilled & 675.00 & 39.20 \\ 
    \bottomrule
 \end{tabular}
 \end{table}
@@ -163,5 +220,7 @@ See Fig.~\ref{fig:mtcars-subplots} for an example of two plots: Fig.~\ref{fig:mt
 \appendix
 
 \chapter{First Appendix}
+
+In case it's needed.
 
 \end{document}

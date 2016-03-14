@@ -1,11 +1,27 @@
 \section{Tables}
 \label{sec:tables}
 
+Tables can also be created in \R{} and inserted automatically. Check Table~\ref{tab:co2_head}.
+
 <<table-co2, results = "asis">>=
 data("CO2")
 co2_head <- head(CO2)
 
 make_table(co2_head, caption = "First rows of the CO2 dataset. Look at the list of tables to see the difference between short and long table caption.")
+@
+
+Something Useful I found was that you can use the \LaTeX{} package \texttt{makecell} to insert linebreaks in table headers. See the source code for Table~\ref{tab:co2_head_2}.
+
+<<table-co2-linebreaks, results = "asis">>=
+co2_head_2 <- co2_head # just for uniqueness
+
+## for linebreaks in table
+colnames(co2_head_2) <- paste0("\\thead{",
+                               c("Plant \\\\ Something", "Type \\\\ Yes", "Treatment \\\\ No",
+                                 "conc \\\\ whatever", "uptake \\\\ ok"),
+                               "}")
+
+make_table(co2_head_2, include.rownames = FALSE, sanitize.colnames.function = function(x) x, caption = "Same table as before but with linebreaks.")
 @
 
 <<tables-clean, include = FALSE, cache = FALSE, load.utils = NULL, dependson = NULL>>=

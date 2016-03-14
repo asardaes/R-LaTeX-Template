@@ -3,3 +3,4 @@ iris-histograms	m_iris	iris	make_table	.Random.seed
 mtcars-subplots	make_table
 basics-data	chess	make_table
 chess-rf	acc	best	chess_rf	make_table
+table-co2-linebreaks	co2_head_2	make_table

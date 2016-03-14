@@ -2,4 +2,5 @@ table-co2	CO2	data	head	make_table
 iris-histograms	~	::	aes	data	facet_grid	geom_histogram	ggplot	iris	theme_bw	value
 mtcars-subplots	$	mtcars	plot
 basics-data	[<-	colnames	colnames<-	ncol	read.csv
-chess-rf	~	==	$	chess	data.frame	round	set.seed	train	trainControl
+chess-rf	$	~	==	chess	data.frame	round	set.seed	train	trainControl
+table-co2-linebreaks	c	co2_head	colnames<-	make_table	paste0

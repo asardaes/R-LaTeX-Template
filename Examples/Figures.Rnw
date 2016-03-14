@@ -10,7 +10,7 @@ opts_chunk$set(fig.path = "Examples/Figs/")
 
 \graphicspath{Examples/Figs/}
 
-See Fig.~\ref{fig:iris-histograms} for an example of a single plot.
+Plots can be created directly in \R{} and the results are added automatically to the \texttt{tex} file. See Fig.~\ref{fig:iris-histograms} for an example of a single plot.
 
 <<iris-histograms, fig.cap = "Histograms for the iris dataset. Look at the list of figures to see difference between short and long captions.">>=
 data("iris")
@@ -22,7 +22,7 @@ ggplot(m_iris, aes(x = value)) +
      theme_bw()
 @
 
-See Fig.~\ref{fig:mtcars-subplots} for an example of two plots: Fig.~\ref{fig:mtcars-subplots1} and Fig.~\ref{fig:mtcars-subplots2}.
+You can create several plots per chunk and have them in the same main figure. See Fig.~\ref{fig:mtcars-subplots} for an example of two plots: Fig.~\ref{fig:mtcars-subplots1} and Fig.~\ref{fig:mtcars-subplots2}.
 
 <<mtcars-subplots, out.width = "0.45\\linewidth", fig.cap = "Plots using \\texttt{mtcars} dataset.", fig.subcap = c("MPG vs HP", "MPG vs Weight")>>=
 plot(mtcars$hp, mtcars$mpg)

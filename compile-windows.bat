@@ -8,6 +8,7 @@ IF NOT EXIST %FILENAME%.tex EXIT /B
 pdflatex -interaction=nonstopmode "%FILENAME%.tex"
 bibtex "%FILENAME%.aux"
 pdflatex -interaction=nonstopmode "%FILENAME%.tex"
+pdflatex -interaction=nonstopmode "%FILENAME%.tex"
 
 DEL "%FILENAME%.aux"
 DEL "%FILENAME%.bbl"

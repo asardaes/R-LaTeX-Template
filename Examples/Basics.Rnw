@@ -1,6 +1,9 @@
 \section{Basics}
 \label{sec:basics}
 
+The \texttt{caret} package is one that can take of parallel execution. Below, I train a random forest on a sample dataset~\cite{lichman2013}.
+
+% This chunk depends on the MD5 of chess.txt; if that file changes, the chunk needs to be updated
 <<basics-data, cache.md5 = my_md5sum("Data/chess.txt")>>=
 
 # Notice how the path on the chunk options above is with respect to root file Thesis.Rnw
@@ -10,7 +13,7 @@ colnames(chess)[ncol(chess)] <- "label"
 
 @
 
-<<chess-rf>>=
+<<chess-rf, echo = TRUE>>=
 set.seed(3830)
 
 chess_rf <- train(label ~ ., data = chess,
@@ -19,12 +22,19 @@ chess_rf <- train(label ~ ., data = chess,
                   trControl = trainControl(method = "oob"))
 
 best <- chess_rf$bestTune$mtry
-acc <- round(chess_rf$results$Accuracy[chess_rf$results$mtry == best], 3)
+acc <- round(chess_rf$results$Accuracy[chess_rf$results$mtry == best],
+             3)
 @
 
 Using a random forest with the Chess dataset and OOB error estimate, best value of \texttt{mtry} was \Sexpr{best} with an accuracy of \Sexpr{acc}.
 
-Try compiling the thesis with parallel support to see the difference in run time.
+Try changing the seed (to invalidate the chunk's cache) and compiling the thesis with/without parallel support to see the difference in run time.
+
+If you don't specify a seed, you might lose reproducibility. For example, the code below might give a different result each time you recompile if you add code before it and \textit{after} the cache for the previous chunk has been created. This is because the previous chunk will no longer set the seed unless its cache is invalidated and the chunk is thus updated.
+
+<<randomness, cache = FALSE, echo = TRUE, load.utils = NULL>>=
+rnorm(1)
+@
 
 <<basics-clean, include = FALSE, cache = FALSE, load.utils = NULL, dependson = NULL>>=
 

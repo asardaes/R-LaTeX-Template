@@ -18,6 +18,7 @@ fi
 pdflatex -interaction=nonstopmode $filename.tex
 bibtex $filename.aux
 pdflatex -interaction=nonstopmode $filename.tex
+pdflatex -interaction=nonstopmode $filename.tex
  
 rm -rf *.aux
 rm -rf *.bbl

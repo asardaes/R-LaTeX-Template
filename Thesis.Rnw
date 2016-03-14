@@ -10,10 +10,6 @@
 
 \begin{document}
 
-% REMINDER: working directory for *chunk headers* and *knitr options* is always directory of **root** file...
-
-% Chunk names must be unique, considering any and all chunks from children files
-
 <<knitr-setup, include = FALSE, cache = FALSE>>=
 library(knitr)
 
@@ -84,10 +80,15 @@ I want to thank...
 
 \input{Introduction/Introduction}
 
+\chapter{Organization}
+\label{ch:organization}
+
+\input{Organization/Organization}
+
 \chapter{Examples}
 \label{ch:examples}
 
-<<examples-figures, child = "Examples/Basics.Rnw">>=
+<<examples-basics, child = "Examples/Basics.Rnw">>=
 @
 
 <<examples-figures, child = "Examples/Figures.Rnw">>=
@@ -112,5 +113,7 @@ I want to thank...
 \appendix
 
 \chapter{First Appendix}
+
+In case it's needed.
 
 \end{document}

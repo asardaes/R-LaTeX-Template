@@ -1,0 +1,80 @@
+\section{Compilation Scripts}
+\label{sec:comp-scripts}
+
+There are two main files used for compilation: \texttt{compile-thesis.sh} for Linux users, and \texttt{compile-thesis.bat} for Windows users. They are both used in the same manner, so in the examples below I will simply refer to the scripts as \texttt{compile}.
+
+The first thing that is needed is of course \LaTeX{}. There are many resources available on how to install it, so I will not dwell on that.
+
+The next thing is \R{} itself. Again I will not go into too much detail, just make sure that the \texttt{Rscript} executable is available in your path. If you have code that will use parallel computation, the default \R{} package that is used is \texttt{doParallel}, although this can be modified in the file \texttt{Thesis.R} (see Section~\ref{sec:main-files}).
+
+If you simply double click on the \texttt{compile} script, it will run \texttt{pdflatex}, \texttt{bibtex} and \texttt{pdflatex} twice (for citations to work). This will apply any changes made to any \texttt{tex} file, but will \textbf{not} detect any changes made in \texttt{Rnw} files, regardless of whether it's \R{} code or not. Running the scripts from the command line with no arguments is equivalent.
+
+The other option is to run the scripts from the command line followed by a single argument, either \texttt{TRUE} or \texttt{FALSE}; this will \textit{knit} the main \texttt{Thesis.Rnw} file and apply all changes made, including \R{} code. If you use \texttt{FALSE}, everything is done sequentially. With \texttt{TRUE}, a number of parallel workers equal to the number of detected CPU cores are registered first, so that \R{} code can run in parallel. This is only useful if your code is specifically made to run in parallel (e.g. with the \texttt{foreach} package).
+
+\section{Main Files}
+\label{sec:main-files}
+
+If the \texttt{compile} scripts are called to update the \R{} code, they basically call \texttt{Rscript} on \texttt{Thesis.R}. The latter registers the parallel workers if necessary and calls \texttt{knitr} on \texttt{Thesis.Rnw}, which creates \texttt{Thesis.tex}. It also loads \R{} utilities on each worker (see Section~\ref{sec:utilities}).
+
+The master file is \texttt{Thesis.Rnw}, which contains the main \texttt{tex} layout as well as the defaults for \texttt{knitr} (more on that in Section~\ref{sec:default-func}).
+
+\subsection{Utilities}
+\label{sec:utilities}
+
+By ``utilities'' I mean the common \R{} functions and libraries that will be used. I have made a basic distinction between cached and uncached utilities. This is related to \texttt{knitr}'s cache function, so you should definitely read about that first if you don't know how it works. Uncached utilities should be the ones that will be used by \texttt{knitr} itself or in the chunk options.
+
+The files are located in the \texttt{Utils} folder and have obvious names\dots
+
+\section{Default Functionality}
+\label{sec:default-func}
+
+\subsection{Knitr Cache}
+
+You can see the defaults for \texttt{knitr} in \texttt{Thesis.Rnw}. By default, all chunks are cached and hidden from the output (with \texttt{echo = FALSE}). Additionally, auto-dependency detection is turned on by default; this has worked well for me.
+
+Uncached utilities are always loaded along with \texttt{knitr}'s defaults. The rest of the used libraries and functions can be included in the cached utilities file.
+
+Note that, if I'm not mistaken, the paths of the files are also influence the cache. So if you download these files and change folder names, you might have to re-run everything the first time you compile.
+
+\subsection{MD5 Hashes}
+
+I've included a function called \texttt{my\_md5sum} that I've used in some chunk options. Since you can add any non-NULL value to chunk options in order to create its cache (again, read \texttt{knitr}'s information on cache if you haven't), you can use MD5 hashes to create chunks that depend on specific files, so that if the files change, the chunk will be updated automatically. There is an example of this in the source code for Section~\ref{sec:basics}.
+
+It is a semi-custom function because the default \texttt{md5sum} doesn't throw an error if it doesn't find the file, in which case you might not notice if you're actually caching a valid file or not.
+
+\subsection{Workspace Cleaning}
+
+I also include a function called \texttt{clean\_workspace} that removes everything except the uncached utilities. It can optionally reload cached utilities and ignore variables if desired. 
+
+I run this at the end of each child \texttt{Rnw} file. I do this because I'm not sure how \texttt{knitr}'s auto-dependency detection works (my bad), and I wanted each child file to be as independent as possible so that things wouldn't break in one section if I changed something from the previous section. Check the source code for the examples, and note that this cleaning is always uncached.
+
+\subsection{Dynamic Loading of Utilities}
+
+I was using several libraries, and it was annoying to wait for all of them to load if all I wanted to do was update content without changing any \R{} code (recall that changes made to \texttt{Rnw} files won't be detected unless you re-knit everything). My solution was to use a \texttt{knitr} hook (see \texttt{knitr}'s website).
+
+The hook is a function called \texttt{utils\_hook}, located in the uncached utilities file. If you see the defaults in \texttt{Thesis.Rnw}, you'll notice every chunk will run the hook by default, which loads cached utilities before actually running the chunk. Since the hooks are only executed if the chunk needs to be updated (i.e. its cache was invalidated or non-existent), utilities are only loaded whenever I actually have to re-run \R{} code. Each chunk that needs to be updated will re-load everything, of course, but that's unimportant (e.g. re-loading a library has no effect).
+
+Notice that chunks that are manually uncached should set the \texttt{load.utils} hook option to NULL to avoid loading things unnecessarily. See the source code for workspace cleaning chunks for examples.
+
+\subsection{Tables}
+
+I used the \texttt{xtable} package to create tables from data frames. I created a (cached) function called \texttt{make\_table} that has some defaults so that I didn't need to write everything every time. You can see the defaults in the source code and note that any default can be overridden via the ellipsis.
+
+The \texttt{results} chunk option should be set to \texttt{"asis"} so that everything is detected correctly. See the source code for Section~\ref{sec:tables}.
+
+\section{Considerations}
+\label{sec:considerations}
+
+\subsection{Random Seeds}
+
+If you're doing things that depend on randomness, you probably care about reproducibility. Some of you might now that \texttt{knitr} can be configured to detect changes in random seed to update chunks, but this doesn't play very well with its cache functionality, so I ended up specifying a random seed for \textbf{each} chunk that required it.
+
+\subsection{File Paths}
+
+Be careful with paths, for example you should specify the correct figure path in both \texttt{knitr} and \LaTeX{} options; see the source code for Section~\ref{sec:figures}.
+
+Additionally, you should know that each child \texttt{Rnw} file is run with its own directory as the working directory. However, the paths you give to \texttt{knitr} or the ones used in chunk options are always with respect to the root directory, i.e. where \texttt{Thesis.Rnw} is located. See the source code for Section~\ref{sec:basics} for an example.
+
+\subsection{Chunk Names}
+
+I think all chunk names need to be unique.
