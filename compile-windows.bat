@@ -7,7 +7,11 @@ IF NOT EXIST %FILENAME%.tex EXIT /B
 
 pdflatex -interaction=nonstopmode "%FILENAME%.tex"
 bibtex "%FILENAME%.aux"
+makeindex "%FILENAME%.aux"
+makeindex "%FILENAME%.idx"
+makeindex "%FILENAME%.nlo" -s nomencl.ist -o "%FILENAME%".nls
 pdflatex -interaction=nonstopmode "%FILENAME%.tex"
+makeindex "%FILENAME%.nlo" -s nomencl.ist -o "%FILENAME%".nls
 pdflatex -interaction=nonstopmode "%FILENAME%.tex"
 
 DEL "%FILENAME%.aux"

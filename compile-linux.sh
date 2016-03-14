@@ -17,7 +17,11 @@ fi
 
 pdflatex -interaction=nonstopmode $filename.tex
 bibtex $filename.aux
+makeindex $filename.aux
+makeindex $filename.idx
+makeindex $filename.nlo -s nomencl.ist -o $filename.nls
 pdflatex -interaction=nonstopmode $filename.tex
+makeindex $filename.nlo -s nomencl.ist -o $filename.nls
 pdflatex -interaction=nonstopmode $filename.tex
  
 rm -rf *.aux

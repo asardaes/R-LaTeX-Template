@@ -25,7 +25,7 @@
 \usepackage{makecell}
 
 % Hyperlinks
-\usepackage[hidelinks]{hyperref}
+\usepackage{hyperref}
 
 % Table of content settings
 \setcounter{tocdepth}{2}
@@ -40,6 +40,14 @@
 
 % Figure names
 \renewcommand{\figurename}{Fig.}
+
+% changes the default name `Bibliography` -> `References'
+\renewcommand{\bibname}{References}
+
+\newenvironment{romanpages}{
+  \setcounter{page}{1}
+  \renewcommand{\thepage}{\roman{page}}}
+{\newpage\renewcommand{\thepage}{\arabic{page}}}
 
 % Used for knitr images from Rnw files
 \newcommand{\subfloat}[2][default for first parameter: need a sub-caption]{\subcaptionbox{#1}{#2}}

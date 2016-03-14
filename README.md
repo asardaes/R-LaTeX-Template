@@ -1,6 +1,6 @@
 # R-LaTeX-Template
 This is just a barebone template that shows how to organize files in order to generate a LaTeX report directly from `R` 
-by using the `knitr` package. The example here is for a basic thesis file, although the document class is not so important.
+by using the `knitr` package. The example here is for the template found [here](https://github.com/kks32/phd-thesis-template).
 
 You can use a combination of `tex` and `Rnw` files to write everything, and the compilation can be done in Windows and Linux
 in 3 ways:

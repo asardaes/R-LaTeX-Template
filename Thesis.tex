@@ -4,9 +4,11 @@
 % DO NOT EDIT THE TEX FILE DIRECTLY
 % ===========================================================================================================
 
-\documentclass{report}\usepackage{knitr}
+\documentclass[a4paper,PageStyleII,12pt,times,numbered,print]{Class/PhDThesisPSnPDF}\usepackage{knitr}
 
 \input{Preamble}
+
+\input{Info}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
 
@@ -16,11 +18,11 @@
 % Cover
 % ===========================================================================================================
 
-\title{Thesis Template using R and knitr}
-\author{Alexis Sard\'a-Espinosa}
-\date{\today}
+\frontmatter
 
-\maketitle
+\begin{titlepage}
+  \maketitle
+\end{titlepage}
 
 % ===========================================================================================================
 % Front matter
@@ -28,17 +30,21 @@
 
 \pagenumbering{Roman}
 
-\chapter*{Dedication}
+\begin{dedication}
 To me
+\end{dedication}
 
-\chapter*{Abstract}
+\begin{abstract}
 Abstract goes here
+\end{abstract}
 
-\chapter*{Declaration}
+\begin{declaration}
 I declare that..
+\end{declaration}
 
-\chapter*{Acknowledgements}
+\begin{acknowledgements}
 I want to thank...
+\end{acknowledgements}
 
 \tableofcontents
 
@@ -46,12 +52,13 @@ I want to thank...
 
 \listoftables
 
+%\printnomenclature
+
 % ===========================================================================================================
 % Main matter
 % ===========================================================================================================
 
-\cleardoublepage
-\pagenumbering{arabic}
+\mainmatter
 
 \chapter{Introduction}
 \label{ch:introduction}
@@ -208,19 +215,25 @@ Qn1 & Quebec & nonchilled & 95.00 & 16.00 \\
 % Bibliography
 % ===========================================================================================================
 
-\bibliographystyle{plainnat}
+\begin{spacing}{0.9}
+
+\bibliographystyle{apalike}
 \nocite{*}
-\bibliography{References}
 \cleardoublepage
+\bibliography{References}
+
+\end{spacing}
 
 % ===========================================================================================================
 % Appendices
 % ===========================================================================================================
 
-\appendix
+\begin{appendices}
 
 \chapter{First Appendix}
 
 In case it's needed.
+
+\end{appendices}
 
 \end{document}
