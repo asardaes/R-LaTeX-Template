@@ -1,6 +1,7 @@
 # R-LaTeX-Template
 This is just a barebone template that shows how to organize files in order to generate a LaTeX report directly from `R` 
 by using the `knitr` package. The example here is for a basic thesis file, although the document class is not so important.
+See [this branch](https://github.com/asardaes/R-LaTeX-Template/tree/cued) for an example with a different template.
 
 You can use a combination of `tex` and `Rnw` files to write everything, and the compilation can be done in Windows and Linux
 in 3 ways:
