@@ -24,7 +24,7 @@ ggplot(m_iris, aes(x = value)) +
 
 You can create several plots per chunk and have them in the same main figure. See Fig.~\ref{fig:mtcars-subplots} for an example of two plots: Fig.~\ref{fig:mtcars-subplots1} and Fig.~\ref{fig:mtcars-subplots2}.
 
-<<mtcars-subplots, out.width = "0.45\\linewidth", fig.cap = "Plots using \\texttt{mtcars} dataset.", fig.subcap = c("MPG vs HP", "MPG vs Weight")>>=
+<<mtcars-subplots, out.width = "0.45\\linewidth", fig.width = 4, fig.asp = 1, fig.cap = "Plots using \\texttt{mtcars} dataset.", fig.subcap = c("MPG vs HP", "MPG vs Weight")>>=
 plot(mtcars$hp, mtcars$mpg)
 
 plot(mtcars$wt, mtcars$mpg)
