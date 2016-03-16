@@ -1,7 +1,7 @@
 \section{Basics}
 \label{sec:basics}
 
-The \texttt{caret} package is one that can take of parallel execution. Below, I train a random forest on a sample dataset~\cite{lichman2013}.
+The \texttt{caret} package is one that can advantage take of parallel execution. Below, I train a random forest on a sample dataset~\cite{lichman2013}.
 
 % This chunk depends on the MD5 of chess.txt; if that file changes, the chunk needs to be updated
 <<basics-data, cache.md5 = my_md5sum("Data/chess.txt")>>=

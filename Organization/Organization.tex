@@ -67,7 +67,7 @@ The \texttt{results} chunk option should be set to \texttt{"asis"} so that every
 
 \subsection{Random Seeds}
 
-If you're doing things that depend on randomness, you probably care about reproducibility. Some of you might now that \texttt{knitr} can be configured to detect changes in random seed to update chunks, but this doesn't play very well with its cache functionality, so I ended up specifying a random seed for \textbf{each} chunk that required it.
+If you're doing things that depend on randomness, you probably care about reproducibility. Some of you might now that \texttt{knitr} can be configured to detect changes in random seed to update chunks, but this doesn't always play very well with its cache functionality, so I ended up specifying a random seed for \textbf{each} chunk that required it.
 
 \subsection{File Paths}
 
@@ -77,4 +77,4 @@ Additionally, you should know that each child \texttt{Rnw} file is run with its 
 
 \subsection{Chunk Names}
 
-I think all chunk names need to be unique.
+I believe all chunk names need to be unique.
