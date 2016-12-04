@@ -24,10 +24,10 @@ colnames(co2_head_2) <- paste0("\\thead{",
 make_table(co2_head_2, include.rownames = FALSE, sanitize.colnames.function = function(x) x, caption = "Same table as before but with linebreaks.")
 @
 
-<<tables-clean, include = FALSE, cache = FALSE, load.utils = NULL, dependson = NULL>>=
+<<tables-clean, include = FALSE, cache = FALSE, load.utils = NULL, rand.seed = NULL, dependson = NULL>>=
 
-# If there are parallel workers saved on a variable called 'cl' (the default), clean each worker too
-if (!is.null(cl <- get0("cl", .GlobalEnv))) parallel::clusterEvalQ(cl, clean_workspace(load.utils = TRUE))
+# If there are parallel workers saved on a variable called 'workers' (the default), clean each worker too
+if (!is.null(workers <- get0("workers", .GlobalEnv))) parallel::clusterEvalQ(workers, clean_workspace())
 
 # Clean knitr environment so that each child file is independent from each other
 clean_workspace()

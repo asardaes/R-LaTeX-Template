@@ -4,7 +4,7 @@
 The \texttt{caret} package is one that can take advantage of parallel execution. Below, I train a random forest on a sample dataset~\cite{lichman2013}.
 
 % This chunk depends on the MD5 of chess.txt; if that file changes, the chunk needs to be updated
-<<basics-data, cache.md5 = my_md5sum("Data/chess.txt")>>=
+<<basics-data, cache.md5 = md5("Data/chess.txt")>>=
 
 # Notice how the path on the chunk options above is with respect to root file Thesis.Rnw
 # However, the actual chunk code below needs a path with respect to the current file
@@ -14,8 +14,6 @@ colnames(chess)[ncol(chess)] <- "label"
 @
 
 <<chess-rf, echo = TRUE>>=
-set.seed(3830)
-
 chess_rf <- train(label ~ ., data = chess,
                   method = "rf",
                   tuneGrid = data.frame(mtry = 8:15),
@@ -28,18 +26,18 @@ acc <- round(chess_rf$results$Accuracy[chess_rf$results$mtry == best],
 
 Using a random forest with the Chess dataset and OOB error estimate, best value of \texttt{mtry} was \Sexpr{best} with an accuracy of \Sexpr{acc}.
 
-Try changing the seed (to invalidate the chunk's cache) and compiling the thesis with/without parallel support to see the difference in run time.
+Try changing something in the chunk (to invalidate the chunk's cache) and compiling the thesis with/without parallel support to see the difference in run time.
 
-If you don't specify a seed, you might lose reproducibility. For example, the code below might give a different result each time you recompile if you add code before it and \textit{after} the cache for the previous chunk has been created. This is because the previous chunk will no longer set the seed unless its cache is invalidated and the chunk is thus updated.
+With the \texttt{rand.seed} hook in place, each chunk should have an associated random seed after you compile everything for the first time. The chunk below is not cached, but its seed is restored everytime you compile, so it should always give the same result. If you add chunks with randomness before it and delete the \texttt{seeds.RData} file to update it, it will probably get a different seed assigned.
 
 <<randomness, cache = FALSE, echo = TRUE, load.utils = NULL>>=
 rnorm(1)
 @
 
-<<basics-clean, include = FALSE, cache = FALSE, load.utils = NULL, dependson = NULL>>=
+<<basics-clean, include = FALSE, cache = FALSE, load.utils = NULL, rand.seed = NULL, dependson = NULL>>=
 
-# If there are parallel workers saved on a variable called 'cl' (the default), clean each worker too
-if (!is.null(cl <- get0("cl", .GlobalEnv))) parallel::clusterEvalQ(cl, clean_workspace(load.utils = TRUE))
+# If there are parallel workers saved on a variable called 'workers' (the default), clean each worker too
+if (!is.null(workers <- get0("workers", .GlobalEnv))) parallel::clusterEvalQ(workers, clean_workspace())
 
 # Clean knitr environment so that each child file is independent from each other
 clean_workspace()

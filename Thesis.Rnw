@@ -14,18 +14,17 @@
 
 <<knitr-setup, include = FALSE, cache = FALSE>>=
 library(knitr)
-
-# Helper functions that should always be loaded
-source("Utils/utils-nocache.R")
+set.seed(9430L)
 
 # To avoid unnecessary warnings if doing sequential computations
 if (is.null(getDoParName())) registerDoSEQ()
 
-# Separate knitr.sty
-opts_knit$set(self.contained = FALSE)
+# Embedded knitr.sty
+opts_knit$set(self.contained = TRUE)
 
 # load.utils is so that each chunk reloads libraries/functions if it needs to be updated
-knit_hooks$set(load.utils = utils_hook)
+knit_hooks$set(load.utils = utils_hook,
+               rand.seed = seeds_hook)
 
 # Defaults
 opts_chunk$set(fig.width = 12, fig.asp = 0.5625,
@@ -33,7 +32,7 @@ opts_chunk$set(fig.width = 12, fig.asp = 0.5625,
                fig.align = "center", fig.pos = "htpb",
                cache = TRUE, echo = FALSE, autodep = TRUE,
                cache.path = "Data/cache/",
-               load.utils = TRUE)
+               load.utils = TRUE, rand.seed = TRUE)
 @
 
 % ===========================================================================================================

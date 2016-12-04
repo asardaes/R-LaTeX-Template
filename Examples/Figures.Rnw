@@ -5,7 +5,6 @@
 
 # Notice that the specified paths are with respect to root file Thesis.Rnw
 opts_chunk$set(fig.path = "Examples/Figs/")
-
 @
 
 \graphicspath{Examples/Figs/}
@@ -30,10 +29,10 @@ plot(mtcars$hp, mtcars$mpg)
 plot(mtcars$wt, mtcars$mpg)
 @
 
-<<figures-clean, include = FALSE, cache = FALSE, load.utils = NULL, dependson = NULL>>=
+<<figures-clean, include = FALSE, cache = FALSE, load.utils = NULL, rand.seed = NULL, dependson = NULL>>=
 
-# If there are parallel workers saved on a variable called 'cl' (the default), clean each worker too
-if (!is.null(cl <- get0("cl", .GlobalEnv))) parallel::clusterEvalQ(cl, clean_workspace(load.utils = TRUE))
+# If there are parallel workers saved on a variable called 'workers' (the default), clean each worker too
+if (!is.null(workers <- get0("workers", .GlobalEnv))) parallel::clusterEvalQ(workers, clean_workspace())
 
 # Clean knitr environment so that each child file is independent from each other
 clean_workspace()

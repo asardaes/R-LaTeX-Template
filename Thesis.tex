@@ -4,7 +4,57 @@
 % DO NOT EDIT THE TEX FILE DIRECTLY
 % ===========================================================================================================
 
-\documentclass[a4paper,PageStyleII,12pt,times,numbered,print]{Class/PhDThesisPSnPDF}\usepackage{knitr}
+\documentclass[a4paper,PageStyleII,12pt,times,numbered,print]{Class/PhDThesisPSnPDF}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
 
 \input{Preamble}
 
@@ -85,8 +135,6 @@ The \texttt{caret} package is one that can take advantage of parallel execution.
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{set.seed}\hlstd{(}\hlnum{3830}\hlstd{)}
-
 \hlstd{chess_rf} \hlkwb{<-} \hlkwd{train}\hlstd{(label} \hlopt{~} \hlstd{.,} \hlkwc{data} \hlstd{= chess,}
                   \hlkwc{method} \hlstd{=} \hlstr{"rf"}\hlstd{,}
                   \hlkwc{tuneGrid} \hlstd{=} \hlkwd{data.frame}\hlstd{(}\hlkwc{mtry} \hlstd{=} \hlnum{8}\hlopt{:}\hlnum{15}\hlstd{),}
@@ -99,11 +147,11 @@ The \texttt{caret} package is one that can take advantage of parallel execution.
 \end{kframe}
 \end{knitrout}
 
-Using a random forest with the Chess dataset and OOB error estimate, best value of \texttt{mtry} was 13 with an accuracy of 0.995.
+Using a random forest with the Chess dataset and OOB error estimate, best value of \texttt{mtry} was 15 with an accuracy of 0.994.
 
-Try changing the seed (to invalidate the chunk's cache) and compiling the thesis with/without parallel support to see the difference in run time.
+Try changing something in the chunk (to invalidate the chunk's cache) and compiling the thesis with/without parallel support to see the difference in run time.
 
-If you don't specify a seed, you might lose reproducibility. For example, the code below might give a different result each time you recompile if you add code before it and \textit{after} the cache for the previous chunk has been created. This is because the previous chunk will no longer set the seed unless its cache is invalidated and the chunk is thus updated.
+With the \texttt{rand.seed} hook in place, each chunk should have an associated random seed after you compile everything for the first time. The chunk below is not cached, but its seed is restored everytime you compile, so it should always give the same result. If you add chunks with randomness before it and delete the \texttt{seeds.RData} file to update it, it will probably get a different seed assigned.
 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
@@ -111,7 +159,7 @@ If you don't specify a seed, you might lose reproducibility. For example, the co
 \hlkwd{rnorm}\hlstd{(}\hlnum{1}\hlstd{)}
 \end{alltt}
 \begin{verbatim}
-## [1] 0.1699193
+## [1] -0.1180655
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
@@ -165,8 +213,8 @@ You can create several plots per chunk and have them in the same main figure. Se
 
 Tables can also be created in \R{} and inserted automatically. Check Table~\ref{tab:co2_head}.
 
-% latex table generated in R 3.2.4 by xtable 1.8-2 package
-% Sun Mar 13 14:41:42 2016
+% latex table generated in R 3.3.2 by xtable 1.8-2 package
+% Sun Dec 04 13:08:11 2016
 \begin{table}[htbp]
 \centering
 \caption[First rows of the CO2 dataset]{First rows of the CO2 dataset. Look at the list of tables to see the difference between short and long table caption.} 
@@ -188,8 +236,8 @@ Tables can also be created in \R{} and inserted automatically. Check Table~\ref{
 
 Something Useful I found was that you can use the \LaTeX{} package \texttt{makecell} to insert linebreaks in table headers. See the source code for Table~\ref{tab:co2_head_2}.
 
-% latex table generated in R 3.2.3 by xtable 1.8-2 package
-% Mon Mar 14 16:35:31 2016
+% latex table generated in R 3.3.2 by xtable 1.8-2 package
+% Sun Dec 04 13:08:11 2016
 \begin{table}[htbp]
 \centering
 \caption[Same table as before but with linebreaks]{Same table as before but with linebreaks.} 

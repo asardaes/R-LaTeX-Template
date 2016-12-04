@@ -34,11 +34,11 @@ You can see the defaults for \texttt{knitr} in \texttt{Thesis.Rnw}. By default, 
 
 Uncached utilities are always loaded along with \texttt{knitr}'s defaults. The rest of the used libraries and functions can be included in the cached utilities file.
 
-Note that, if I'm not mistaken, the paths of the files are also influence the cache. So if you download these files and change folder names, you might have to re-run everything the first time you compile.
+Cache is created in \texttt{Data/cache/}.
 
 \subsection{MD5 Hashes}
 
-I've included a function called \texttt{my\_md5sum} that I've used in some chunk options. Since you can add any non-NULL value to chunk options in order to create its cache (again, read \texttt{knitr}'s information on cache if you haven't), you can use MD5 hashes to create chunks that depend on specific files, so that if the files change, the chunk will be updated automatically. There is an example of this in the source code for Section~\ref{sec:basics}.
+I've included a function called \texttt{md5} that I've used in some chunk options. Since you can add any non-NULL value to chunk options in order to create its cache (again, read \texttt{knitr}'s information on cache if you haven't), you can use MD5 hashes to create chunks that depend on specific files, so that if the files change, the chunk will be updated automatically. There is an example of this in the source code for Section~\ref{sec:basics}.
 
 It is a semi-custom function because the default \texttt{md5sum} doesn't throw an error if it doesn't find the file, in which case you might not notice if you're actually caching a valid file or not.
 
@@ -52,7 +52,7 @@ I run this at the end of each child \texttt{Rnw} file. I do this because I'm not
 
 I was using several libraries, and it was annoying to wait for all of them to load if all I wanted to do was update content without changing any \R{} code (recall that changes made to \texttt{Rnw} files won't be detected unless you re-knit everything). My solution was to use a \texttt{knitr} hook (see \texttt{knitr}'s website).
 
-The hook is a function called \texttt{utils\_hook}, located in the uncached utilities file. If you see the defaults in \texttt{Thesis.Rnw}, you'll notice every chunk will run the hook by default, which loads cached utilities before actually running the chunk. Since the hooks are only executed if the chunk needs to be updated (i.e. its cache was invalidated or non-existent), utilities are only loaded whenever I actually have to re-run \R{} code. Each chunk that needs to be updated will re-load everything, of course, but that's unimportant (e.g. re-loading a library has no effect).
+The hook is a function called \texttt{utils\_hook}, located in the uncached utilities file. If you see the defaults in \texttt{Thesis.Rnw}, you'll notice every chunk will run the hook by default, which loads cached utilities before actually running the chunk. Since the hooks are only executed if the chunk needs to be updated (i.e. its cache was invalidated or non-existent), utilities are only loaded whenever I actually have to re-run \R{} code. Each chunk that needs to be updated will re-load everything, of course, but that's unimportant (i.e., re-loading a library has no effect).
 
 Notice that chunks that are manually uncached should set the \texttt{load.utils} hook option to NULL to avoid loading things unnecessarily. See the source code for workspace cleaning chunks for examples.
 
@@ -62,12 +62,14 @@ I used the \texttt{xtable} package to create tables from data frames. I created 
 
 The \texttt{results} chunk option should be set to \texttt{"asis"} so that everything is detected correctly. See the source code for Section~\ref{sec:tables}.
 
-\section{Considerations}
-\label{sec:considerations}
-
 \subsection{Random Seeds}
 
-If you're doing things that depend on randomness, you probably care about reproducibility. Some of you might now that \texttt{knitr} can be configured to detect changes in random seed to update chunks, but this doesn't always play very well with its cache functionality, so I ended up specifying a random seed for \textbf{each} chunk that required it.
+I set one overall seed in the initial chunk where \Texttt{knitr} is configured. I've added another hook (\texttt{seeds\_hook}) that saves the random seed for every chunk (by default) and restores it whenever it is run, in order to maintain reproducibility. The seeds are saved in the \texttt{Data/seeds.RData} file. It should detect new chunks, and the chunk labels are used for naming. If you want to disable this for a given chunk, add \texttt{rand.seed = NULL} to the chunk options (see, e.g., the last chunks in the files in the \texttt{Examples} folder).
+
+Note that when adding/modifying chunks after initial caching, it could be that some or all chunks end up with new random seeds, especially if some chunks are not cached. If there is a chunk whose reproducibility is crucial, set its seed manually inside the chunk. Alternatively, manually open the seeds file, delete the seeds you want to update, and manually save it again.
+
+\section{Considerations}
+\label{sec:considerations}
 
 \subsection{File Paths}
 
