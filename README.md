@@ -5,20 +5,20 @@ See [this branch](https://github.com/asardaes/R-LaTeX-Template/tree/cued) for an
 
 You can use a combination of `tex` and `Rnw` files to write everything, and the compilation can be done in Windows and Linux
 in 3 ways:
-* By directly running the `.bat` or `.sh` scripts (double click or command line)
+* By directly running the `.bat` or `bash` scripts (double click or command line)
   + This performs any updates done to `tex` files without running any `R` code
-* Calling the `.bat` or `.sh` scripts followed by `FALSE`
+* Calling the `.bat` or `bash` scripts followed by `FALSE`
   + This also runs all the `R` code *sequentially*
-* Calling the `.bat` or `.sh` scripts followed by `TRUE`
+* Calling the `.bat` or `bash` scripts followed by `TRUE`
   + This also runs all the `R` code with *parallel* support
 
 You must have `Rscript` on your path for the last two options. Also, you'll need the `doParallel` package for the last option.
 
 Examples (Linux):
 ```
-./compile-linux.sh
-./compile-linux.sh FALSE
-./compile-linux.sh TRUE
+./compile-linux
+./compile-linux FALSE
+./compile-linux TRUE
 ```
 
 The PDF file contains more specifics and explanations of the sample content.
